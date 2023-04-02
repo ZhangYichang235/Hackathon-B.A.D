@@ -27,18 +27,9 @@ def cardboard_box_normal(length_box, width_box, height, ear_size):
     # Print the dimensions of the cardboard box
     return (ceil(length), ceil(width)), errorx, errory
 
-print(cardboard_box_normal(length_box=13, width_box=6, height=1, ear_size=2))
-
-# set up pygame window
-pygame.init()
-WIDTH = 800
-HEIGHT = 600
-win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Rectangles")
-
 # define rectangle class
 class Rectangle:
-    def __init__(self, l, w, errorx, errory):
+    def __init__(self, l, w, errorx, errory, win):
         self.width = l
         self.height = w
         self.x = None
@@ -48,6 +39,7 @@ class Rectangle:
         self.errorx = errorx
         self.errory = errory
 
+        self.win = win
     def set_position(self, x, y):
         self.x = x
         self.y = y
@@ -60,17 +52,7 @@ class Rectangle:
 
 
     def draw(self):
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width - self.errorx, self.height - self.errory))
-        
-
-# list of rectangles to draw
-rectangles = []
-
-
-rects = []
-
-y = 0
-x = 0
+        pygame.draw.rect(self.win, self.color, (self.x, self.y, self.width - self.errorx, self.height - self.errory))
 
 # define function to find the most valuable place on canvas
 def find_best_position(rect):
@@ -99,36 +81,53 @@ def find_best_position(rect):
         #     x += 1
         # y += 1
     return best_x, best_y
+WIDTH = 800
+HEIGHT = 600
 
-# main game loop
-while True:
-    # handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
+rectangles = []
+rects = []
+
+
+
+def main():
+    # set up pygame window
+    global WIDTH, HEIGHT, rectangles, rects, win
+    pygame.init()
+    win = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    pygame.display.set_caption("Rectangles")
+
+    # list of rectangles to draw
+    run  = True
+    # main game loop
+    while run:
+        # handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                run = False
+            
+        # add a new rectangle with random dimensions
+        new_rect = Rectangle(10, 20, 1.1, 1.1, win)
         
-    # add a new rectangle with random dimensions
-    new_rect = Rectangle()
-    
-    # find the best position for the new rectangle
-    new_x, new_y = find_best_position(new_rect)
-    new_rect.set_position(new_x, new_y)
-    
-    # draw all rectangles
-    win.fill((255, 255, 255))
-    for rect in rectangles:
-        rect.draw()
+        # find the best position for the new rectangle
+        new_x, new_y = find_best_position(new_rect)
+        new_rect.set_position(new_x, new_y)
         
-    # draw new rectangle
-    new_rect.draw()
-    
-    # update screen
-    pygame.display.update()
-    
-    # add new rectangle to list of rectangles
-    
-    rectangles.append(new_rect)
-    
-    # wait for a short time to slow down the loop
-    pygame.time.wait(100)
+        # draw all rectangles
+        win.fill((255, 255, 255))
+        for rect in rectangles:
+            rect.draw()
+            
+        # draw new rectangle
+        new_rect.draw()
+        
+        # update screen
+        pygame.display.update()
+        
+        # add new rectangle to list of rectangles
+        
+        rectangles.append(new_rect)
+        
+        # wait for a short time to slow down the loop
+        pygame.time.wait(100)

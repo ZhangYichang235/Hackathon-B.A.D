@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import functions
 dimensions = []
 
 class App(ctk.CTk):
@@ -80,6 +81,7 @@ class App(ctk.CTk):
             height=70,
             corner_radius=10,
             text="Calculate Map",
+            command=self.open_map
         )
         self.cancel= ctk.CTkButton(
             master=self,
@@ -121,10 +123,13 @@ class App(ctk.CTk):
         self.textbox.configure(state="normal")
         global dimensions
 
-        l = float(self.lengthinput.get())
-        w = float(self.widthinput.get())
-        h = float(self.heightinput.get())
+        if self.lengthinput.get() != '' or self.widthinput.get() != '' or self.heightinput.get() != '':
+            l = float(self.lengthinput.get())
+            w = float(self.widthinput.get())
+            h = float(self.heightinput.get())
 
+        else:
+            pass
         dim = [l, w, h]
 
         dimensions.append(dim)
@@ -136,9 +141,8 @@ class App(ctk.CTk):
     def delete(self):
         self.textbox.delete("0.0","")
 
-
-
-
+    def open_map(self):
+        functions.main()
 
 
 
@@ -147,4 +151,3 @@ if __name__ == "__main__":
     app.grid_rowconfigure(0)
     app.grid_columnconfigure(0,weight=1)
     app.mainloop()
-
