@@ -4,12 +4,11 @@ dimensions = []
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        global startline
-
         self.title("Box Bot")
         self.minsize(400, 600)
         self.maxsize(400, 600)
-## Text ##:
+
+## Text ##
         self.title = ctk.CTkLabel(
             master=self,
             text= "Box Bot",
@@ -35,6 +34,7 @@ class App(ctk.CTk):
             text= "Insert Height:",
             font=("", 25,"bold")
             )
+        
 # Entries #
         self.lengthinput = ctk.CTkEntry(
             master=self,
@@ -99,6 +99,7 @@ class App(ctk.CTk):
         )
         self.textbox.configure(state="disabled")
 
+## Grid ##
         self.title.grid(row=0, column=0, columnspan=2)
 
         self.lengthtext.grid(row=1, column=0, pady=5)
@@ -118,6 +119,7 @@ class App(ctk.CTk):
         self.cancel.grid(row=7, column=0, columnspan=2, pady=5)
 
     def addtolist(self):
+        #adds input text into textbox
         self.textbox.configure(state="normal")
         global dimensions
 
@@ -127,17 +129,18 @@ class App(ctk.CTk):
 
         dim = [l, w, h]
 
+        #appends dimensions into global list
         dimensions.append(dim)
-
         self.textbox.insert("0.0" ,f"{l} x {w} x {h}\n")
-
         self.textbox.configure(state="disabled")
 
     def delete(self):
         global dimensions
+        #delete added line
         self.textbox.configure(state="normal")
         self.textbox.delete("1.0","2.0")
         self.textbox.configure(state="disabled")
+        #delete recent dimensions from list
         dimensions.pop(-1)
         print(dimensions)
 
