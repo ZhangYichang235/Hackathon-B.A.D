@@ -134,7 +134,13 @@ class App(ctk.CTk):
         self.textbox.configure(state="disabled")
 
     def delete(self):
-        self.textbox.delete("0.0","")
+        global dimensions
+        self.textbox.configure(state="normal")
+        self.textbox.delete("1.0","2.0")
+        self.textbox.configure(state="disabled")
+        dimensions.pop(-1)
+        print(dimensions)
+
 
 
 
