@@ -83,7 +83,8 @@ def main(dimensions):
         box_size = card_board_box_net_lw(dimensions[ind])
         boxlist.append((int(box_size[0][0]),int(box_size[0][1])))
 
-
+    print(boxlist)
+    sorted_list = sorted(boxlist, key=lambda x: (-x[0], -x[1]))
     while True:
         # handle events
         for event in pygame.event.get():
@@ -92,7 +93,7 @@ def main(dimensions):
                 quit()
                 # the list we input
         if run == 1:
-            for i in boxlist:
+            for i in sorted_list:
                 # add a new rectangle
                 new_rect = Rectangle(i[0], i[1], box_size[1], box_size[2], win)
                 # find the best position for the new rectangle

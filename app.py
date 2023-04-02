@@ -1,14 +1,14 @@
 import customtkinter as ctk
 import tkinter as tk
-import bug_fix
+import algorithm
 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
         self.title("Box Bot")
-        self.minsize(400, 600)
-        self.maxsize(400, 600)
+        self.minsize(425, 600)
+        self.maxsize(425, 600)
 
         self.dimensions = []
         self.tf = False
@@ -143,7 +143,7 @@ class App(ctk.CTk):
                 h += 5
                 self.textbox.insert("0.0" ,f"FRAGILE: {l} x {w} x {h}\n")
             else:
-                self.textbox.insert("0.0" ,f"{l} x {w} x {h}\n") 
+                self.textbox.insert("0.0" ,f"NON-FRAGILE: {l} x {w} x {h}\n") 
             # dimensions are appended into list    
             dim = [l, w, h]
             self.dimensions.append(dim)
@@ -168,7 +168,7 @@ class App(ctk.CTk):
         else:
             while(None in self.dimensions):
                 self.dimensions.remove(None)
-            bug_fix.main(self.dimensions)
+            algorithm.main(self.dimensions)
             
 
 
