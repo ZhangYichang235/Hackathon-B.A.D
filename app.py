@@ -148,7 +148,6 @@ class App(ctk.CTk):
             dim = [l, w, h]
             self.dimensions.append(dim)
 
-                
         self.textbox.configure(state="disabled")
 
 
