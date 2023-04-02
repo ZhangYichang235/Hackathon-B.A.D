@@ -5,14 +5,10 @@ from math import *
 
 # set up pygame window
 #                         lxwxh
-def card_board_box_net_lw(dimension, fragiletf, ear_size=2):
-    if fragiletf:
-        length = (2*dimension[0] + 2) + (2*dimension[2] + 2) + (ear_size)
-        width = (2*dimension[2] + 2) + (2*ear_size) + (dimension[1] + 2)
+def card_board_box_net_lw(dimension, ear_size=2):
 
-    if not fragiletf:
-        length = (2*dimension[0]) + (2*dimension[2]) + (ear_size)
-        width = (2*dimension[2]) + (2*ear_size) + (dimension[1])
+    length = (2*dimension[0]) + (2*dimension[2]) + (ear_size)
+    width = (2*dimension[2]) + (2*ear_size) + (dimension[1])
 
     errorx = ceil(length) - length
     errory = ceil(width) - width
@@ -69,14 +65,13 @@ def find_best_position(rect):
                 best_x, best_y = x, y
     return best_x, best_y
 
-fragile_list = []
-non_fragile_list = []
+boxlist = []
 
 run = 1
 WIDTH = 800
 HEIGHT = 800
 
-def main(fragile, dimensions):
+def main(dimensions):
     global run, WIDTH, HEIGHT
     pygame.init()
 
@@ -84,13 +79,9 @@ def main(fragile, dimensions):
     pygame.display.set_caption("Rectangles")
     # main game loop
     for ind in range(0, len(dimensions)):
-        if fragile:
-            box_size_fragile = card_board_box_net_lw(dimensions[ind], fragile)
-            fragile_list.append(int(box_size_fragile[0][0]),int(box_size_fragile[0][1]))
-        
-        if not fragile:
-            box_size_non_fragile = card_board_box_net_lw(dimensions[ind], fragile)
-            non_fragile_list.append((int(box_size_non_fragile[0][0]),int(box_size_non_fragile[0][1])))
+
+        box_size = card_board_box_net_lw(dimensions[ind])
+        boxlist.append((int(box_size[0][0]),int(box_size[0][1])))
 
 
     while True:
@@ -100,10 +91,10 @@ def main(fragile, dimensions):
                 pygame.quit()
                 quit()
                 # the list we input
-        if run == 1 and fragile:
-            for i in fragile_list:
-                # add a new rectangle with random dimensions
-                new_rect = Rectangle(i[0], i[1], box_size_fragile[1], box_size_fragile[2], win)
+        if run == 1:
+            for i in boxlist:
+                # add a new rectangle
+                new_rect = Rectangle(i[0], i[1], box_size[1], box_size[2], win)
                 # find the best position for the new rectangle
                 new_x, new_y = find_best_position(new_rect)
                 new_rect.set_position(new_x, new_y)
@@ -119,29 +110,4 @@ def main(fragile, dimensions):
                 rectangles.append(new_rect)
                 # wait for a short time to slow down the loop
                 pygame.time.wait(100)
-                run = 0
-
-        if run == 1 and not fragile:
-            for i in non_fragile_list:
-                # add a new rectangle with random dimensions
-                new_rect = Rectangle(i[0], i[1], box_size_non_fragile[1], box_size_non_fragile[2], win)
-                # find the best position for the new rectangle
-                new_x, new_y = find_best_position(new_rect)
-                new_rect.set_position(new_x, new_y)
-                # draw all rectangles
-                win.fill((255, 255, 255))
-                for rect in rectangles:
-                    rect.draw()
-                # draw new rectangle
-                new_rect.draw()
-                
-                # update screen
-                pygame.display.update()
-                
-                # add new rectangle to list of rectangles
-                rectangles.append(new_rect)
-                
-                # wait for a short time to slow down the loop
-                pygame.time.wait(100)
-
                 run = 0

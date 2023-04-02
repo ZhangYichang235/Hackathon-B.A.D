@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import tkinter as tk
 import bug_fix
 
 class App(ctk.CTk):
@@ -10,7 +11,6 @@ class App(ctk.CTk):
         self.maxsize(400, 600)
 
         self.dimensions = []
-        self.dimensions_fragile = []
         self.tf = False
         
 ## Text ##:
@@ -125,23 +125,27 @@ class App(ctk.CTk):
     def addtolist(self):
         #adds input text into textbox
         self.textbox.configure(state="normal")
-        global tf
+        try:
+            l = float(self.lengthinput.get())
+            w = float(self.widthinput.get())
+            h = float(self.heightinput.get())
 
-        l = float(self.lengthinput.get())
-        w = float(self.widthinput.get())
-        h = float(self.heightinput.get())
-
-        dim = [l, w, h]
-
-        #appends dimensions into global list
-
-        if self.fragile.get() == "Fragile":
-            tf = True
-            self.textbox.insert("0.0" ,f"FRAGILE:{l} x {w} x {h}\n")
-            self.dimensions_fragile.append(dim)     
+            if l <= 0 or w <= 0 or h <= 0:           
+                tk.messagebox.showwarning(title="Error", message="Dimensions cannot contain values less than or below zero.")
+                raise Exception("Dimensions cannot contain values less than or below zero.")  
+        except ValueError:
+            tk.messagebox.showwarning(title="Error", message="Dimensions must only include numerical values.")
         else:
-            tf = False
-            self.textbox.insert("0.0" ,f":{l} x {w} x {h}\n") 
+            if self.fragile.get() == "Fragile":
+            # if object is fragile, 5 cm is added to each side
+                l += 5
+                w += 5
+                h += 5
+                self.textbox.insert("0.0" ,f"FRAGILE: {l} x {w} x {h}\n")
+            else:
+                self.textbox.insert("0.0" ,f"{l} x {w} x {h}\n") 
+            # dimensions are appended into list    
+            dim = [l, w, h]
             self.dimensions.append(dim)
 
                 
@@ -155,15 +159,16 @@ class App(ctk.CTk):
         self.textbox.delete("1.0","2.0")
         self.textbox.configure(state="disabled")
         #delete recent dimensions from list
-        dimensions.pop(-1)
-        print(dimensions)
+        self.dimensions.pop(-1)
+        print(self.dimensions)
         
 
     def open_map(self):
-        if self.tf == True:
-            bug_fix.main(self.tf, self.dimensions_fragile)
-        if self.tf == False:
-            bug_fix.main(self.tf, self.dimensions)
+        if len(self.dimensions) == 0:
+            tk.messagebox.showwarning(title=None, message="Please add an item to the list.")
+        else:
+            bug_fix.main(self.dimensions)
+
 
 if __name__ == "__main__":
     app = App()
