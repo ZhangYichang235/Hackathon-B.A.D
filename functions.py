@@ -2,7 +2,7 @@ import pygame
 import random
 from math import *
 
-def cardboard_box_frigile(length_box, width_box, height, ear_size):
+def cardboard_box_frigile(length_box, width_box, height, ear_size=2):
     length_box += 5
     height += 5
     width_box += 5
@@ -14,9 +14,9 @@ def cardboard_box_frigile(length_box, width_box, height, ear_size):
     errory = ceil(width) - width
     
     # Print the dimensions of the cardboard box
-    return (ceil(length), ceil(width)), errorx, errory
+    return ceil(length), ceil(width), errorx, errory
 
-def cardboard_box_normal(length_box, width_box, height, ear_size):
+def cardboard_box_normal(length_box, width_box, height, ear_size=2):
     # Find the dimensions of the cardboard box
     length = length_box + height + length_box + height + ear_size
     width = (2*height) + width_box + (2*ear_size)
@@ -25,7 +25,7 @@ def cardboard_box_normal(length_box, width_box, height, ear_size):
     errory = ceil(width) - width
     
     # Print the dimensions of the cardboard box
-    return (ceil(length), ceil(width)), errorx, errory
+    return ceil(length), ceil(width), errorx, errory
 
 # define rectangle class
 class Rectangle:
@@ -81,17 +81,18 @@ def find_best_position(rect):
         #     x += 1
         # y += 1
     return best_x, best_y
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 750
+HEIGHT = 750
 
 rectangles = []
 rects = []
+rect_box = []
 
-
+ok = 0
 
 def main():
     # set up pygame window
-    global WIDTH, HEIGHT, rectangles, rects, win
+    global WIDTH, HEIGHT, rectangles, rects, win, ok, rect_box
     pygame.init()
     win = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -108,26 +109,29 @@ def main():
                 run = False
             
         # add a new rectangle with random dimensions
-        new_rect = Rectangle(10, 20, 1.1, 1.1, win)
         
-        # find the best position for the new rectangle
-        new_x, new_y = find_best_position(new_rect)
-        new_rect.set_position(new_x, new_y)
-        
-        # draw all rectangles
-        win.fill((255, 255, 255))
-        for rect in rectangles:
-            rect.draw()
+        for rect in rects:
+            new_rect = Rectangle(rect[0], rect[1], rect[2], rect[3], win)
             
-        # draw new rectangle
-        new_rect.draw()
-        
-        # update screen
-        pygame.display.update()
-        
-        # add new rectangle to list of rectangles
-        
-        rectangles.append(new_rect)
+        # find the best position for the new rectangle
+            new_x, new_y = find_best_position(new_rect)
+            new_rect.set_position(new_x, new_y)
+            
+            # draw all rectangles
+            win.fill((255, 255, 255))
+            
+            for rect1 in rectangles:
+                rect1.draw()    
+            # draw new rectangle
+            new_rect.draw()
+            
+            
+            # update screen
+            pygame.display.update()
+            
+            # add new rectangle to list of rectangles
+            rectangles.append(new_rect)
+
         
         # wait for a short time to slow down the loop
         pygame.time.wait(100)

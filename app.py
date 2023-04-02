@@ -1,15 +1,16 @@
 import customtkinter as ctk
 import functions
 dimensions = []
+tf = False
 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        global startline
 
         self.title("Box Bot")
         self.minsize(400, 600)
         self.maxsize(400, 600)
+        
 ## Text ##:
         self.title = ctk.CTkLabel(
             master=self,
@@ -120,29 +121,55 @@ class App(ctk.CTk):
         self.cancel.grid(row=7, column=0, columnspan=2, pady=5)
 
     def addtolist(self):
+        #adds input text into textbox
         self.textbox.configure(state="normal")
-        global dimensions
+        global dimensions, tf
 
-        if self.lengthinput.get() != '' or self.widthinput.get() != '' or self.heightinput.get() != '':
-            l = float(self.lengthinput.get())
-            w = float(self.widthinput.get())
-            h = float(self.heightinput.get())
+        l = float(self.lengthinput.get())
+        w = float(self.widthinput.get())
+        h = float(self.heightinput.get())
 
-        else:
-            pass
         dim = [l, w, h]
 
+        #appends dimensions into global list
         dimensions.append(dim)
 
-        self.textbox.insert("0.0" ,f"{l} x {w} x {h}\n")
 
+        if self.fragile.get() == "Fragile":
+            tf = True
+            self.textbox.insert("0.0" ,f"FRAGILE:{l} x {w} x {h}\n")     
+        else:
+            tf = False
+            self.textbox.insert("0.0" ,f":{l} x {w} x {h}\n") 
+        
+
+        if tf == True:
+            for dimension in dimensions:
+                length, width, errorx, errory = functions.cardboard_box_frigile(dimension[0], dimension[1], dimension[2])
+                functions.rects.append([length, width, errorx, errory])
+            
+        else:
+            for dimension in dimensions:
+                length, width, errorx, errory = functions.cardboard_box_frigile(dimension[0], dimension[1], dimension[2])
+                functions.rects.append([length, width, errorx, errory])
+        
         self.textbox.configure(state="disabled")
 
-    def delete(self):
-        self.textbox.delete("0.0","")
+
+    def delete(self):       
+        global dimensions
+        #delete added line
+        self.textbox.configure(state="normal")
+        self.textbox.delete("1.0","2.0")
+        self.textbox.configure(state="disabled")
+        #delete recent dimensions from list
+        dimensions.pop(-1)
+        print(dimensions)
+        
 
     def open_map(self):
         functions.main()
+        
 
 
 
@@ -150,4 +177,6 @@ if __name__ == "__main__":
     app = App()
     app.grid_rowconfigure(0)
     app.grid_columnconfigure(0,weight=1)
+
     app.mainloop()
+
