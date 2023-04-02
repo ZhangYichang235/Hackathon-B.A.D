@@ -24,20 +24,20 @@ class App(ctk.CTk):
         
         self.lengthtext = ctk.CTkLabel(
             master=self,
-            text= "Insert Length:",
-            font=("", 25,"bold")
+            text= "Product Length (cm):",
+            font=("", 20,"bold")
             )
         
         self.widthtext = ctk.CTkLabel(
             master=self,
-            text= "Insert Width:",
-            font=("", 25,"bold")
+            text= "Product Width (cm):",
+            font=("", 20,"bold")
             )
         
         self.heighttext = ctk.CTkLabel(
             master=self,
-            text= "Insert Height:",
-            font=("", 25,"bold")
+            text= "Product Height (cm):",
+            font=("", 20,"bold")
             )
 # Entries #
         self.lengthinput = ctk.CTkEntry(
@@ -131,10 +131,10 @@ class App(ctk.CTk):
             h = float(self.heightinput.get())
 
             if l <= 0 or w <= 0 or h <= 0:           
-                tk.messagebox.showwarning(title="Error", message="Dimensions cannot contain values less than or below zero.")
+                tk.messagebox.showerror(title="Error", message="Dimensions cannot contain values less than or below zero.")
                 raise Exception("Dimensions cannot contain values less than or below zero.")  
         except ValueError:
-            tk.messagebox.showwarning(title="Error", message="Dimensions must only include numerical values.")
+            tk.messagebox.showerror(title="Error", message="Dimensions must only include numerical values.")
         else:
             if self.fragile.get() == "Fragile":
             # if object is fragile, 5 cm is added to each side
@@ -167,7 +167,10 @@ class App(ctk.CTk):
         if len(self.dimensions) == 0:
             tk.messagebox.showwarning(title=None, message="Please add an item to the list.")
         else:
+            while(None in self.dimensions):
+                self.dimensions.remove(None)
             bug_fix.main(self.dimensions)
+            
 
 
 if __name__ == "__main__":
