@@ -74,9 +74,10 @@ HEIGHT = 800
 def main(dimensions):
     global run, WIDTH, HEIGHT
     pygame.init()
-
+    run = 1
     win = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Rectangles")
+    clock = pygame.time.Clock()
     # main game loop
     for ind in range(0, len(dimensions)):
 
@@ -85,12 +86,12 @@ def main(dimensions):
 
     print(boxlist)
     sorted_list = sorted(boxlist, key=lambda x: (-x[0], -x[1]))
-    while True:
-        # handle events
+    running = True
+    while running:
+        clock.tick(120)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                running = False
                 # the list we input
         if run == 1:
             for i in sorted_list:
@@ -109,6 +110,9 @@ def main(dimensions):
                 pygame.display.update()
                 # add new rectangle to list of rectangles
                 rectangles.append(new_rect)
-                # wait for a short time to slow down the loop
-                pygame.time.wait(100)
+
                 run = 0
+
+    pygame.quit()
+
+main()

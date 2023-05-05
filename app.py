@@ -166,7 +166,7 @@ class App(ctk.CTk):
         if len(self.dimensions) == 0:
             tk.messagebox.showwarning(title=None, message="Please add an item to the list.")
         else:
-            while(None in self.dimensions):
+            while (None in self.dimensions):
                 self.dimensions.remove(None)
             algorithm.main(self.dimensions)
             
